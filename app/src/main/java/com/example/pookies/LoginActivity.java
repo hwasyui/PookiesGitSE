@@ -9,38 +9,38 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText etEmail, etPassword;
-    Button btnLogin;
-    TextView tvSignUp;
-    FirebaseAuth mAuth;
+    private EditText etEmail;
+    private EditText etPassword;
+    private Button btnLogin;
+    private TextView tvSignUp;
+
+    // Dummy account credentials
+    private static final String Dum_Email = "test@example.com";
+    private static final String Dum_Pass = "password123";
+
+    // Admin account credentials (kept from the original code)
+    private static final String Admin_Email = "admin@example.com";
+    private static final String Admin_Pass = "1234";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mAuth = FirebaseAuth.getInstance();
-
         etEmail = findViewById(R.id.emailInput);
         etPassword = findViewById(R.id.passwordInput);
         btnLogin = findViewById(R.id.loginButton);
-        tvSignUp = findViewById(R.id.alreadyHaveAccount);
+        tvSignUp = findViewById(R.id.alreadyHaveAccount);  // TextView for navigation to Sign Up
 
+        // Set onClickListener for the "Don't have an account? Sign Up" TextView
         tvSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Navigate to RegisterActivity
+                // Navigate to SignUpActivity
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
@@ -50,32 +50,25 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = etEmail.getText().toString().trim();
-                String password = etPassword.getText().toString().trim();
+                String email = etEmail.getText().toString();
+                String password = etPassword.getText().toString();
 
                 // Simple validation
                 if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
                     Toast.makeText(LoginActivity.this, "Please enter both email and password", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Authenticate user with Firebase
-                    mAuth.signInWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        // Sign in success, navigate to ChatActivity
-                                        FirebaseUser user = mAuth.getCurrentUser();
-                                        Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-                                        startActivity(intent);
-                                        finish();  // Finish LoginActivity
-                                    } else {
-                                        // If sign in fails, display a message to the user.
-                                        Toast.makeText(LoginActivity.this, "Authentication failed: " + task.getException().getMessage(),
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
+                    // Check for dummy account or admin account
+                    if ((email.equals(Dum_Email) && password.equals(Dum_Pass)) ||
+                            (email.equals(Admin_Email) && password.equals(Admin_Pass))) {
+                        // Successful login - Navigate to the main activity
+                        Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LoginActivity.this, ChatActivity .class);
+                        startActivity(intent);
+                        finish();  // Close LoginActivity
+                    } else {
+                        // Incorrect login credentials
+                        Toast.makeText(LoginActivity.this, "Invalid email or password", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
