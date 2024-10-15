@@ -3,8 +3,17 @@ package com.example.pookies;
 public class Message {
     public static String SENT_BY_ME = "ME";
     public static String SENT_BY_BOT = "BOT";
-    String message;
-    String sentBy;
+    public String message;
+    public String sentBy;
+
+    // Default constructor for Firebase
+    public Message() {
+    }
+
+    public Message(String message, String sentBy) {
+        this.message = message;
+        this.sentBy = sentBy;
+    }
 
     public String getMessage() {
         return message;
@@ -19,11 +28,6 @@ public class Message {
     }
 
     public void setSentBy(String sentBy) {
-        this.sentBy = sentBy;
-    }
-
-    public Message(String message, String sentBy) {
-        this.message = message;
         this.sentBy = sentBy;
     }
 }
