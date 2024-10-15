@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+   <group android:id="@+id/group1">
+      <item
+         android:icon="@drawable/chat"
+         android:id="@+id/navChat"
+         android:title="Chat"/>
+   </group>
+   <group android:id="@+id/group2">
+      <item
+          android:icon="@drawable/settings"
+          android:id="@+id/navSettings"
+          android:title="Settings" />
+      <item
+          android:icon="@drawable/feedback"
+          android:id="@+id/navFeedback"
+          android:title="Feedback"/>
+      <item
+          android:icon="@drawable/about"
+          android:id="@+id/navAbout"
+          android:title="About" />
+      <item
+          android:icon="@drawable/policy"
+          android:id="@+id/navPolicy"
+          android:title="Policy" />
+   </group>
+      <item
+       android:icon="@drawable/logout"
+       android:id="@+id/navLogout"
+       android:title="Logout"/>
+
+</menu>
