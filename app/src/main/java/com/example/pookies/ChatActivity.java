@@ -83,7 +83,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        // Click listener for textUsername (username text)
         textUsername.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
