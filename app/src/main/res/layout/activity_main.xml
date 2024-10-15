@@ -5,91 +5,90 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/homepg"
+    android:background="@color/blue_dark"
     tools:context=".MainActivity">
 
-<TextView
-    android:id="@+id/wcText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:fontFamily="@font/montserrat_bold"
-    android:text="Welcome"
-    android:textColor="#000065"
-    android:textSize="45sp"
-    android:textStyle="bold"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.159"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.524" />
+    <ImageView
+        android:id="@+id/logoImage"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="76dp"
+        android:src="@drawable/logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-<TextView
-android:id="@+id/wcText2"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:layout_marginTop="-10dp"
-android:fontFamily="@font/montserrat"
-android:text="to Pookies!"
-android:textColor="#000065"
-android:textSize="45sp"
-app:layout_constraintBottom_toBottomOf="parent"
-app:layout_constraintEnd_toEndOf="parent"
-app:layout_constraintHorizontal_bias="0.263"
-app:layout_constraintStart_toStartOf="parent"
-app:layout_constraintTop_toBottomOf="@+id/wcText"
-app:layout_constraintVertical_bias="0.0" />
+    <LinearLayout
+        android:layout_width="310dp"
+        android:layout_height="476dp"
+        android:layout_marginBottom="33dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-<Button
-android:id="@+id/lgBtn"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:backgroundTint="@color/cardview_shadow_end_color"
-android:fontFamily="@font/montserrat_medium"
-android:paddingLeft="60dp"
-android:paddingRight="60dp"
-android:text="I have an Account"
-android:textColor="#000065 "
-android:textSize="20sp"
-app:cornerRadius="0dp"
-app:layout_constraintBottom_toBottomOf="parent"
-app:layout_constraintEnd_toEndOf="parent"
-app:layout_constraintHorizontal_bias="0.532"
-app:layout_constraintStart_toStartOf="parent"
-app:layout_constraintTop_toBottomOf="@+id/rgBtn"
-app:layout_constraintVertical_bias="0.052"
-app:strokeColor="#000065"
-app:strokeWidth="3dp" />
+        <TextView
+            android:id="@+id/wcText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Welcome"
+            android:textColor="#fff"
+            android:textSize="45sp"
+            android:textStyle="bold" />
 
-<Button
-android:id="@+id/rgBtn"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:backgroundTint="#000065"
-android:fontFamily="@font/montserrat_medium"
-android:paddingLeft="58dp"
-android:paddingRight="58dp"
-android:text="I need an Account"
-android:textColor="#ffd1c7"
-android:textSize="20sp"
-app:cornerRadius="0dp"
-app:layout_constraintBottom_toBottomOf="parent"
-app:layout_constraintEnd_toEndOf="parent"
-app:layout_constraintHorizontal_bias="0.523"
-app:layout_constraintStart_toStartOf="parent"
-app:layout_constraintTop_toTopOf="parent"
-app:layout_constraintVertical_bias="0.715" />
+        <TextView
+            android:id="@+id/wcText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-9dp"
+            android:fontFamily="@font/montserrat"
+            android:text="to Pookies!"
+            android:textColor="#ffff"
+            android:textSize="45sp" />
 
-<TextView
-android:id="@+id/textView"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:text="Created by Pookies On Prayer™"
-app:flow_verticalBias="10"
-app:layout_constraintBottom_toBottomOf="parent"
-app:layout_constraintEnd_toEndOf="parent"
-app:layout_constraintHorizontal_bias="0.497"
-app:layout_constraintStart_toStartOf="parent"
-app:layout_constraintTop_toTopOf="parent"
-app:layout_constraintVertical_bias="0.977" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/lgBtn"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:background="@color/pink"
+            android:fontFamily="@font/montserrat_medium"
+            android:paddingLeft="60dp"
+            android:paddingRight="60dp"
+            android:text="I have an Account"
+            android:textColor="#fff "
+            android:textSize="20sp"
+            app:backgroundtint="@null"
+            app:cornerRadius="10dp" />
+
+        <Button
+            android:id="@+id/rgBtn"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@color/pink"
+            android:fontFamily="@font/montserrat_medium"
+            android:paddingLeft="60dp"
+            android:paddingRight="60dp"
+            android:text="I have an Account"
+            android:textColor="#fff "
+            android:textSize="20sp"
+            app:backgroundtint="@null"
+            app:cornerRadius="10dp" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="Created by Pookies On Prayer™"
+            android:textColor="@color/white"
+            app:flow_verticalBias="10" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
