@@ -1,14 +1,141 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<!-- res/layout/fragment_feedback_form.xml -->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FeedbackFragment">
+    android:background="@color/pink"
+    android:padding="16dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <!-- Container for the form content -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@color/blue_dark"
+        android:elevation="4dp"
+        android:layout_gravity="center">
 
+        <!-- Title -->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Feedback Form"
+            android:textSize="30dp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:fontFamily="@font/montserrat_bold"
+            android:paddingBottom="10dp"
+            android:paddingTop="40dp" />
+
+        <!-- Description -->
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="We would love to hear your thoughts, suggestions, concerns or problems with anything so we can improve!"
+            android:textColor="#FFFFFF"
+            android:fontFamily="@font/montserrat_medium"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="16dp" />
+
+        <!-- Divider line between description and feedback type -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Feedback Type Label -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Feedback Type"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:paddingBottom="8dp" />
+
+        <!-- Radio Group for feedback type -->
+
+        <RadioGroup
+            android:id="@+id/feedbackType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:paddingBottom="16dp">
+
+            <RadioButton
+                android:id="@+id/radio_comments"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:buttonTint="#FFFFFF"
+                android:gravity="center"
+                android:paddingStart="-10dp"
+                android:text="Comments"
+                android:textColor="#FFFFFF"
+                android:textSize="13dp" />
+
+            <RadioButton
+                android:id="@+id/radio_suggestions"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:buttonTint="#FFFFFF"
+                android:gravity="center"
+                android:paddingStart="-5dp"
+                android:text="Suggestions"
+                android:textColor="#FFFFFF"
+                android:textSize="13dp" />
+
+            <RadioButton
+                android:id="@+id/radio_questions"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:buttonTint="#FFFFFF"
+                android:gravity="center"
+                android:paddingStart="-10dp"
+                android:text="Questions"
+                android:textColor="#FFFFFF"
+                android:textSize="13dp" />
+        </RadioGroup>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="16dp"
+            />
+        <!-- Feedback Description -->
+        <EditText
+            android:id="@+id/feedbackText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Describe your feedback"
+            android:minLines="3"
+            android:gravity="top"
+            android:backgroundTint="#FF000000"
+            android:textColor="#000000"
+            android:textColorHint="#555555" />
+        <TextView
+            android:id="@+id/errorTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FF0000"
+            android:visibility="gone"
+            android:paddingTop="8dp"/>
+        <!-- Name Input Fields -->
+        <!-- Submit Button -->
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Send Feedback"
+            android:backgroundTint="@color/blue_light"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
 </FrameLayout>
