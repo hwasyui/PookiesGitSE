@@ -20,8 +20,13 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="20dp"
+<<<<<<< Updated upstream
             android:gravity="right"
             android:layout_marginTop="100dp"
+=======
+            android:layout_marginTop="25dp"
+            android:gravity="right"
+>>>>>>> Stashed changes
             android:id="@+id/time"
             android:orientation="horizontal">
 
@@ -69,7 +74,11 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="20dp"
             android:gravity="right"
+<<<<<<< Updated upstream
             android:layout_marginTop="220dp"
+=======
+            android:layout_marginTop="140dp"
+>>>>>>> Stashed changes
 
             android:orientation="horizontal">
 
