@@ -1,64 +1,142 @@
 package com.example.pookies;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static android.Manifest.permission.CAMERA;
+
 public class ProfileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private EditText usernameEditText, emailEditText, passwordEditText;
+    private ShapeableImageView profileImageView;
+    private FloatingActionButton floatingActionButton;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final int REQUEST_CAMERA = 100;
+    private static final int REQUEST_GALLERY = 101;
+    private static final int REQUEST_CAMERA_PERMISSION = 102;
 
-    public ProfileFragment() {
-        // Required empty public constructor
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        // Initialize the EditText fields
+        usernameEditText = view.findViewById(R.id.username);
+        emailEditText = view.findViewById(R.id.email);
+        passwordEditText = view.findViewById(R.id.password);  // For showing password as asterisks
+
+        // Initialize the ShapeableImageView and FloatingActionButton
+        profileImageView = view.findViewById(R.id.imageView2);
+        floatingActionButton = view.findViewById(R.id.floatingActionButton);
+
+        // Fetch the current user from Firebase
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        // If the user is logged in, set their email, username, and dummy password
+        if (currentUser != null) {
+            // Set the email
+            emailEditText.setText(currentUser.getEmail());
+
+            // Set the display name (username)
+            String displayName = currentUser.getDisplayName();
+            if (displayName != null && !displayName.isEmpty()) {
+                usernameEditText.setText(displayName);
+            } else {
+                // If display name is not set, show a default placeholder
+                usernameEditText.setHint("No username set");
+            }
+
+            // Set a dummy password as asterisks (cannot retrieve the actual password)
+            passwordEditText.setText("********"); // Show 8 asterisks as a placeholder for password
+        }
+
+        // Set click listener for the FloatingActionButton to pick image
+        floatingActionButton.setOnClickListener(v -> {
+            CharSequence[] options = {"Take Photo", "Choose from Gallery", "Remove Profile Picture", "Cancel"};
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
+            builder.setTitle("Update Profile Picture");
+            builder.setItems(options, (dialog, which) -> {
+                if (options[which].equals("Take Photo")) {
+                    if (ContextCompat.checkSelfPermission(getActivity(), CAMERA) != PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{CAMERA}, REQUEST_CAMERA_PERMISSION);
+                    } else {
+                        openCamera();
+                    }
+                } else if (options[which].equals("Choose from Gallery")) {
+                    openGallery();
+                } else if (options[which].equals("Remove Profile Picture")) {
+                    removeProfilePicture();  // Call method to reset the profile picture
+                } else {
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
+        });
+
+        return view;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    private void openCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQUEST_CAMERA);
+    }
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        startActivityForResult(intent, REQUEST_GALLERY);
+    }
+
+    private void removeProfilePicture() {
+        // Reset the image view to a default placeholder image
+        profileImageView.setImageResource(R.drawable.baseline_person_24);  // Set this to your default profile image drawable
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CAMERA && data != null) {
+                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+                profileImageView.setImageBitmap(imageBitmap);
+            } else if (requestCode == REQUEST_GALLERY && data != null) {
+                Uri selectedImage = data.getData();
+                profileImageView.setImageURI(selectedImage);
+            }
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CAMERA_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PERMISSION_GRANTED) {
+                openCamera();
+            } else {
+                Toast.makeText(getActivity(), "Camera permission is required to take a photo", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
