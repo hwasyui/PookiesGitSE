@@ -68,7 +68,7 @@ public class ProfileFragment extends Fragment {
             }
 
             // Set a dummy password as asterisks (cannot retrieve the actual password)
-            passwordEditText.setText("****"); // Show 8 asterisks as a placeholder for password
+            passwordEditText.setText("********"); // Show 8 asterisks as a placeholder for password
         }
 
         // Set click listener for the FloatingActionButton to pick image
