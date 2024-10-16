@@ -2,12 +2,8 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Pookies" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-<<<<<<< Updated upstream
-        <item name="android:statusBarColor">@android:color/transparent</item>
-=======
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->     
         <item name="android:statusBarColor">#000065</item>
->>>>>>> Stashed changes
 
     </style>
 

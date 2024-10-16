@@ -1,181 +1,192 @@
 package com.example.pookies;
 
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.Toast;
-import android.widget.ImageView;
-import android.widget.*;
-
-<<<<<<< Updated upstream
-import androidx.activity.EdgeToEdge;
-=======
 import android.content.Intent;
 import android.content.SharedPreferences;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
->>>>>>> Stashed changes
-import androidx.annotation.NonNull;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.io.IOException;
 
 public class ChatActivity extends AppCompatActivity {
 
+    private static final String PREFS_NAME = "APP_PREFS";
+    private static final String USER_ID_KEY = "USER_ID";
+
     DrawerLayout drawerLayout;
-    ImageButton buttonDrawerToogle;
+    ImageButton buttonDrawerToggle;
     NavigationView navigationView;
+    ImageView userImage;
+    TextView textUsername, textEmail;
+    SharedPreferences prefs;
+    FirebaseAuth mAuth;
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
 
-<<<<<<< Updated upstream
-        drawerLayout = findViewById(R.id.drawerLayout);
-        buttonDrawerToogle = findViewById(R.id.buttonDrawerToggle);
-        navigationView = findViewById(R.id.navigationView);
+        mAuth = FirebaseAuth.getInstance();
+        prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        dbHelper = new DBHelper(this);
 
-        buttonDrawerToogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.open();
-            }
-=======
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (currentUser != null) {
-            String userID = currentUser.getUid(); // Store this for session management
-            String displayName = currentUser.getDisplayName(); // Display this to the user
-
-            SharedPreferences prefs = getSharedPreferences("APP_PREFS", MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString("USER_ID", userID);  // Store user ID in SharedPreferences
-            editor.apply();
-
-            // Display the username in the UI (or fallback to "User" if display name is not set)
-            if (displayName != null && !displayName.isEmpty()) {
-                Toast.makeText(this, "Welcome, " + displayName, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Welcome, User", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            // No user is logged in, redirect to LoginActivity
-            Intent intent = new Intent(ChatActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
+        if (!isUserLoggedIn()) {
+            redirectToLogin();
+            return;
         }
 
+        setContentView(R.layout.activity_chat);
 
-        drawerLayout = findViewById(R.id.drawerLayout);
-        buttonDrawerToogle = findViewById(R.id.buttonDrawerToggle);
-        navigationView = findViewById(R.id.navigationView);
+        initializeViews();
+        setupNavigationDrawer();
+        loadUserData();
 
-        buttonDrawerToogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.open();
-            }
->>>>>>> Stashed changes
-        });
-
-        View headerView = navigationView.getHeaderView(0);
-        ImageView userImage = headerView.findViewById(R.id.userImage);
-        TextView textUsername = headerView.findViewById(R.id.textUsername);
-
-        userImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Load ProfileFragment
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new ProfileFragment())
-                        .commit();
-                // Close drawer after fragment is replaced
-                drawerLayout.close();
-            }
-        });
-
-        // Click listener for textUsername (username text)
-        textUsername.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Load ProfileFragment
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new ProfileFragment())
-                        .commit();
-                // Close drawer after fragment is replaced
-                drawerLayout.close();
-            }
-        });
-
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item){
-
-                Fragment selectedFragment = null;
-
-                // Replace fragments based on which menu item is clicked
-                int itemId = item.getItemId();
-                if (itemId == R.id.navChat) {
-                    selectedFragment = new ChatFragment();
-                } else if (itemId == R.id.navSettings) {
-                    selectedFragment = new SettingsFragment();
-                } else if (itemId == R.id.navFeedback) {
-                    selectedFragment = new FeedbackFragment();
-                } else if (itemId == R.id.navAbout) {
-                    selectedFragment = new AboutFragment();
-                } else if (itemId == R.id.navPolicy) {
-                    selectedFragment = new PolicyFragment();
-                } else if (itemId == R.id.navLogout) {
-                    // Handle logout logic here
-                    return false;
-                }
-
-                // Replace the fragment if one was selected
-                if (selectedFragment != null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, selectedFragment) // 'fragment_container' is the ID of the FrameLayout in activity_content.xml
-                            .commit();
-                }
-
-                drawerLayout.close();
-                return true;
-            }
-        });
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new ChatFragment())
                     .commit();
         }
     }
-<<<<<<< Updated upstream
-=======
-    private void logOutUser() {
-        // Sign out the user from Firebase
-        FirebaseAuth.getInstance().signOut();
 
-        // Clear UID from SharedPreferences (clear session)
-        getSharedPreferences("APP_PREFS", MODE_PRIVATE)
-                .edit()
-                .remove("USER_ID")
-                .apply();
-
-        // Show a toast message to confirm logout
-        Toast.makeText(ChatActivity.this, "You have been logged out", Toast.LENGTH_SHORT).show();
-
-        // Redirect to LoginActivity
-        Intent intent = new Intent(ChatActivity.this, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear activity stack
-        startActivity(intent);
-        finish(); // Close ChatActivity
+    private boolean isUserLoggedIn() {
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        String userID = prefs.getString(USER_ID_KEY, null);
+        return firebaseUser != null || userID != null;
     }
 
->>>>>>> Stashed changes
+    private void initializeViews() {
+        drawerLayout = findViewById(R.id.drawerLayout);
+        buttonDrawerToggle = findViewById(R.id.buttonDrawerToggle);
+        navigationView = findViewById(R.id.navigationView);
+
+        View headerView = navigationView.getHeaderView(0);
+        userImage = headerView.findViewById(R.id.userImage);
+        textUsername = headerView.findViewById(R.id.textUsername);
+        textEmail = headerView.findViewById(R.id.textEmail);
+    }
+
+    private void setupNavigationDrawer() {
+        buttonDrawerToggle.setOnClickListener(v -> drawerLayout.open());
+
+        userImage.setOnClickListener(v -> loadProfileFragment());
+        textUsername.setOnClickListener(v -> loadProfileFragment());
+
+        navigationView.setNavigationItemSelectedListener(item -> {
+            Fragment selectedFragment = null;
+            int itemId = item.getItemId();
+            if (itemId == R.id.navChat) {
+                selectedFragment = new ChatFragment();
+            } else if (itemId == R.id.navSettings) {
+                selectedFragment = new SettingsFragment();
+            } else if (itemId == R.id.navFeedback) {
+                selectedFragment = new FeedbackFragment();
+            } else if (itemId == R.id.navLogout) {
+                logOutUser();
+                return true;
+            }
+
+            if (selectedFragment != null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, selectedFragment)
+                        .commit();
+            }
+
+            drawerLayout.close();
+            return true;
+        });
+    }
+
+    private void loadUserData() {
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        String userID = prefs.getString(USER_ID_KEY, null);
+
+        if (firebaseUser != null) {
+            // User is logged in with Firebase
+            textUsername.setText(firebaseUser.getDisplayName());
+            textEmail.setText(firebaseUser.getEmail());
+            Toast.makeText(this, "Welcome, " + firebaseUser.getDisplayName(), Toast.LENGTH_SHORT).show();
+        } else if (userID != null) {
+            // User is logged in with SharedPreferences
+            User currentUser = dbHelper.getUserByEmail(userID);
+            if (currentUser != null) {
+                textUsername.setText(currentUser.getName());
+                textEmail.setText(currentUser.getEmail());
+                Toast.makeText(this, "Welcome, " + currentUser.getName(), Toast.LENGTH_SHORT).show();
+            } else {
+                // User ID in SharedPreferences is invalid
+                logOutUser();
+                return;
+            }
+        }
+
+        loadProfilePicture();
+    }
+
+    private void loadProfilePicture() {
+        String profilePicUri = prefs.getString("PROFILE_PIC_URI", null);
+        if (profilePicUri != null) {
+            try {
+                Uri uri = Uri.parse(profilePicUri);
+                userImage.setImageURI(uri);
+
+                // If setImageURI fails (returns null drawable), fall back to bitmap method
+                if (userImage.getDrawable() == null) {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                    userImage.setImageBitmap(bitmap);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Failed to load profile picture", Toast.LENGTH_SHORT).show();
+                userImage.setImageResource(R.drawable.person);
+            }
+        } else {
+            userImage.setImageResource(R.drawable.person);
+        }
+    }
+
+    private void loadProfileFragment() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new ProfileFragment())
+                .commit();
+        drawerLayout.close();
+    }
+
+    private void redirectToLogin() {
+        Intent intent = new Intent(ChatActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    private void logOutUser() {
+        mAuth.signOut(); // Sign out from Firebase
+        prefs.edit().remove(USER_ID_KEY).apply(); // Clear SharedPreferences
+
+        Toast.makeText(ChatActivity.this, "You have been logged out", Toast.LENGTH_SHORT).show();
+        redirectToLogin();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!isUserLoggedIn()) {
+            redirectToLogin();
+        } else {
+            loadProfilePicture();
+        }
+    }
 }
