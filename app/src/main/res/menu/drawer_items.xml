@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
    <group android:id="@+id/group1">
       <item
-         android:icon="@drawable/chat"
-         android:id="@+id/navChat"
-         android:title="Chat"/>
+          android:icon="@drawable/chat"
+          android:id="@+id/navChat"
+          android:title="Chat"/>
    </group>
    <group android:id="@+id/group2">
       <item
@@ -24,9 +24,12 @@
           android:id="@+id/navPolicy"
           android:title="Policy" />
    </group>
-      <item
+   <item
+       android:icon="@drawable/bluetooth"
+       android:id="@+id/navBluetooth"
+       android:title="Bluetooth" />
+   <item
        android:icon="@drawable/logout"
        android:id="@+id/navLogout"
        android:title="Logout"/>
-
 </menu>

@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base application theme -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here -->
+        <item name="colorPrimary">#6200EE</item>
+        <item name="colorPrimaryDark">#3700B3</item>
+        <item name="colorAccent">#03DAC5</item>
+    </style>
 
-    <style name="circular">circular</style>
+    <!-- Add a custom theme for your SplashActivity -->
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Set the background to your splash screen background image -->
+        <item name="android:windowBackground">
+            @drawable/background_blue
+        </item>
+    </style>
 </resources>
