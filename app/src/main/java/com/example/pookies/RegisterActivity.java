@@ -9,30 +9,26 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    EditText etEmail, etName, etPassword, etConfirmPassword;
-    Button btnSignUp;
-    TextView tvAlreadyHaveAccount;
-    FirebaseAuth mAuth;
+    private EditText etEmail;
+    private EditText etName;
+    private EditText etPassword;
+    private EditText etConfirmPassword;
+    private Button btnSignUp;
+    private TextView tvAlreadyHaveAccount;
+
+    // Dummy account credentials
+    private static final String Dum_Email = "test@example.com";
+    private static final String Dum_Name = "Test User";
+    private static final String Dum_Pass = "password123";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
-        // Initialize FirebaseAuth
-        mAuth = FirebaseAuth.getInstance();
 
         // Initialize views
         etEmail = findViewById(R.id.emailInput);
@@ -42,80 +38,52 @@ public class RegisterActivity extends AppCompatActivity {
         btnSignUp = findViewById(R.id.signupButton);
         tvAlreadyHaveAccount = findViewById(R.id.alreadyHaveAccount);
 
+        // Set click listener for "Already Have an Account?" TextView
         tvAlreadyHaveAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Navigate to LoginActivity
                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
 
+        // Set click listener for Sign Up button
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                registerUser();
+                String email = etEmail.getText().toString();
+                String name = etName.getText().toString();
+                String password = etPassword.getText().toString();
+                String confirmPassword = etConfirmPassword.getText().toString();
+
+                // Simple validation
+                if (TextUtils.isEmpty(email) || TextUtils.isEmpty(name) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
+                    Toast.makeText(RegisterActivity.this, "All fields are required", Toast.LENGTH_SHORT).show();
+                } else if (!password.equals(confirmPassword)) {
+                    Toast.makeText(RegisterActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Check if the input matches the dummy account
+                    if (email.equals(Dum_Email) && name.equals(Dum_Name) && password.equals(Dum_Pass)) {
+                        // Dummy account sign-up success
+                        Toast.makeText(RegisterActivity.this, "Dummy account sign-up successful!", Toast.LENGTH_SHORT).show();
+
+                        // Navigate to WelcomeActivity or MainActivity
+                        Intent intent = new Intent(RegisterActivity.this, ChatActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        // For non-dummy accounts, you would typically perform actual sign-up logic here
+                        // For this example, we'll just show a message
+                        Toast.makeText(RegisterActivity.this, "Sign-up successful (non-dummy account)!", Toast.LENGTH_SHORT).show();
+
+                        // Navigate to WelcomeActivity or MainActivity
+                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
             }
         });
     }
-
-    private void registerUser() {
-        String email = etEmail.getText().toString().trim();
-        String name = etName.getText().toString().trim();
-        String password = etPassword.getText().toString().trim();
-        String confirmPassword = etConfirmPassword.getText().toString().trim();
-
-        // Simple validation
-        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(name) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
-            Toast.makeText(RegisterActivity.this, "All fields are required", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (!password.equals(confirmPassword)) {
-            Toast.makeText(RegisterActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Create user with email and password
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign-up success, get current user
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            if (user != null) {
-                                String userID = user.getUid(); // Get the user's unique ID (UID)
-
-                                // Save UID in SharedPreferences (session management)
-                                getSharedPreferences("APP_PREFS", MODE_PRIVATE)
-                                        .edit()
-                                        .putString("USER_ID", userID)
-                                        .apply();
-
-                                // Update user profile with the display name (name)
-                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                        .setDisplayName(name)
-                                        .build();
-                                user.updateProfile(profileUpdates)
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    // Navigate to next activity (e.g., ChatActivity)
-                                                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                                                    startActivity(intent);
-                                                    finish();  // Finish RegisterActivity
-                                                }
-                                            }
-                                        });
-                            }
-                        } else {
-                            // Sign-up failed, show error
-                            Toast.makeText(RegisterActivity.this, "Authentication failed: " + task.getException().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
-
 }
