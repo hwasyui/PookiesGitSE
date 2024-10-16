@@ -1,36 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- res/layout/fragment_bluetooth.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Paired Devices ListView -->
+    <Button
+        android:id="@+id/search_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search for devices" />
+
     <ListView
         android:id="@+id/devices_list_view"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:dividerHeight="1dp"
-        android:padding="10dp"/>
-
-    <!-- Send and Receive Buttons -->
-    <Button
-        android:id="@+id/send_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Send Chat Data"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="#4CAF50"
-        android:textColor="#FFFFFF"/>
-
-    <Button
-        android:id="@+id/receive_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Receive Chat Data"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="#FF5722"
-        android:textColor="#FFFFFF"/>
-
+        android:layout_height="wrap_content" />
 </LinearLayout>
