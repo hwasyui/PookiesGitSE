@@ -94,6 +94,12 @@ public class ChatActivity extends AppCompatActivity {
                 selectedFragment = new SettingsFragment();
             } else if (itemId == R.id.navFeedback) {
                 selectedFragment = new FeedbackFragment();
+            } else if (itemId == R.id.navAbout) {
+                selectedFragment = new AboutFragment();
+            } else if (itemId == R.id.navPolicy) {
+                selectedFragment = new PolicyFragment();
+            } else if (itemId == R.id.navBluetooth) {
+                selectedFragment = new BluetoothFragment();
             } else if (itemId == R.id.navLogout) {
                 logOutUser();
                 return true;

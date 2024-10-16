@@ -30,4 +30,5 @@ public class Message {
     public void setSentBy(String sentBy) {
         this.sentBy = sentBy;
     }
+
 }
