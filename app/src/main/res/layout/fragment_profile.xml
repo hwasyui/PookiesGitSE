@@ -70,7 +70,7 @@
 
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/editProfileButton"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="100dp"
@@ -82,7 +82,7 @@
 
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/forgotPasswordButton"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="100dp"
